@@ -2,35 +2,35 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
-# -------------------
+# --------------
 # User Schemas
-# -------------------
+# --------------
 
 class UserBase(BaseModel):
     username: str
     email: str
 
 class UserCreate(UserBase):
-    password: str  # Plain password for registration (will be hashed)
+    password: str  # Plain password (to be hashed)
 
 class User(UserBase):
     id: int
     is_active: bool
-    items: List['Item'] = []  # List of items associated with the user
+    items: List['Item'] = []  # List of items belonging to the user
 
     class Config:
-        orm_mode = True  # Allow Pydantic to work with ORM objects
+        orm_mode = True  # Enable compatibility with ORM objects
 
-# -------------------
+# --------------
 # Item Schemas
-# -------------------
+# --------------
 
 class ItemBase(BaseModel):
     title: str
     description: Optional[str] = None
 
 class ItemCreate(ItemBase):
-    pass  # Same fields as ItemBase; used when creating an item
+    pass  # Same as ItemBase; used for item creation
 
 class Item(ItemBase):
     id: int
@@ -39,9 +39,9 @@ class Item(ItemBase):
     class Config:
         orm_mode = True
 
-# -------------------
-# Token Schemas (for authentication)
-# -------------------
+# --------------
+# Token Schemas (Authentication)
+# --------------
 
 class Token(BaseModel):
     access_token: str
@@ -50,7 +50,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
-# This is to support forward references in Pydantic models.
+# Support forward references for Pydantic models.
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .schemas import Item
